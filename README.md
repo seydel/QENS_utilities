@@ -59,9 +59,10 @@ and the goodnes of the fit can be calculated by
 
 gof = goodness_of_fit( x, y, popt, q, n, r, dy, **protein_fit ) .
 
-The function convoluted_model_parser builds the actual fit function from a sum of Voigt functions and the background. Is called by model_sqw_parser which contains the different models for the scattering function. Importantly, model_sqw_parser can be extended by added additional models follwoing the existing scheme.
+The function convoluted_model_parser builds the actual fit function from a sum of Voigt functions and the background. Is called by model_sqw_parser which contains the different models for the scattering function. Importantly, model_sqw_parser can be extended by adding new models following the existing scheme.
 
+The spectrometer resolution function expressed by a sum of an arbitrary number of Gaussians can be fitted by the function resolution_function. This function is quite involved, as it has been attempted to accommodate several different spectrometers. A successful fit of a resolution function by a sum of Gaussians in general requires a considerable effort in adapting initial guesses and boundaries. It is noted that the Gaussians may have non-zero center positions along the energy axis.
 
-
+The other functions in the collection, such as load routines for data, are rather self-explaining.
 
 
