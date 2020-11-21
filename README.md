@@ -27,12 +27,12 @@ For any model chosen, additional keywords have to specify the associated number 
 
 Depending on the specific model, additional keywords may apply that for instance pass fixed parameters.
 
-For instance, 
+For example, 
 
 protein_fit = dict( SolventIntensities=Isolv, SolventWidths=Wsolv, NumberLorentzians=4, UseDirac=1, UseSlopedBackground=1, 
 				       UseFlatBackground=1, BGSlope=bgs, BGFlat=bgc, SolventDirac=dsolv, SQWModel='BATSGlobal2State' )
                
-selects a model that performs a global fit for several momentum transfers at once that contains the following components, as explained in 
+selects a model performing a global fit for several momentum transfers at once that contains the following components, as explained in 
 M. Grimaldo et al., Phys.Chem.Chem.Phys. 17, 4645  (2015), https://dx.doi.org/doi:10.1039/C4CP04944F, equation 6:
 
 - One Lorentzian that accounts for the center-of-mass diffusion of tracer proteins in an aqueous solution sample and obeys gamma = D q^2, where gamma is the Lorentzian half width at half maximum;
@@ -59,7 +59,7 @@ and the goodnes of the fit can be calculated by
 
 gof = goodness_of_fit( x, y, popt, q, n, r, dy, **protein_fit ) .
 
-The function convoluted_model_parser builds the actual fit function from a sum of Voigt functions and the background. Is called by model_sqw_parser which contains the different models for the scattering function. Importantly, model_sqw_parser can be extended by adding new models following the existing scheme.
+The function convoluted_model_parser builds the actual fit function from a sum of Voigt functions and the background. It is called by model_sqw_parser which contains the different models for the scattering function. Importantly, model_sqw_parser can be extended by adding new models following the existing scheme.
 
 The spectrometer resolution function expressed by a sum of an arbitrary number of Gaussians can be fitted by the function resolution_function. This function is quite involved, as it has been attempted to accommodate several different spectrometers. A successful fit of a resolution function by a sum of Gaussians in general requires a considerable effort in adapting initial guesses and boundaries. It is noted that the Gaussians may have non-zero center positions along the energy axis.
 
