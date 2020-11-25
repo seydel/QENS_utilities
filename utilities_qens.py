@@ -2,11 +2,10 @@
 # python utility functions for QENS fits
 #
 # compatible with both backscattering and time-of-flight spectroscopy (TOF) data 
-# including amongst other models 2 coupled diffusive states, global fits of several q-values simultaneously,
+# including among other models 2 coupled diffusive states, global fits for several q-values simultaneously,
 # fit of the D2O solvent background or use of this background as fixed contribution in sample fits.
-# This collection does not contain a main program. Essential steps how to create a main program are explained in README.MD.
 # The energy axis is always in micro eV (converted from meV at load level for TOF data).
-# By Tilo Seydel, project started in summer 2017
+# By Tilo Seydel
 # requires python 3.5.2 or higher
 #
 # This collection of utility functions does not contain any main function.
