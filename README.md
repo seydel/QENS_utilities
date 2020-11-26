@@ -5,7 +5,7 @@ The file utilities_qens.py contains a collection of small functions that may hel
 
 The functions have been inspired by the analysis of QENS data from proteins in solution, the concept of which is explained in
 M. Grimaldo et al., EPJ Web of Conferences 83, 02005 (2015) published by the European Physical Society;
-https://dx.doi.org/10.1051/epjconf/20158302005 (the algorithms used therein being based on MATLAB).
+https://dx.doi.org/10.1051/epjconf/20158302005 .
 
 Central to this approach to QENS data analysis is the description of the spectrometer energy resolution function R by a sum of Gaussian functions such that this resolution function can be accounted for analytically - as opposed to a numerical convolution - when fitting a model S to the observed spectra. This model scattering function S can consist of a sum of an arbitrary number of Lorentzian functions that account for diffusion processes, of an elastic scattering contribution modeled by a Dirac function, as well as of an affine background defined by a slope and a constant offset. The Lorentzian and Dirac functions are centered at zero energy transfer by the definition of quasi-elastic scattering. The Lorentzian and Dirac functions are transformed into sums of Voigt functions by the analytical convolution with R.
 
