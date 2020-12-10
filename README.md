@@ -26,11 +26,11 @@ A typical call of the fit function can be written as follows:
 _popt, pcov = curve_fit( lambda x, *p: wrapper_fit_func_parser( x, q, n, r, len( f0 ), p, **protein_fit ), x, y, p0=f0, bounds=(l,u), sigma=dy )_
 
 Therein, the vectors _x_, _y_, and _dy_ contain the energies, corresponding scattering intensities, and their errors, respectively. _q_ is the vector containing the absolute values of the momentum transfer(s), _n = range(...,...)_ contains the indices of the momentum transfers within _q_ to be taken into account for the fit, and _f0_ the vector for the initial guess for the fit parameters _p_.
-r is the matrix containing the parameters of the Gaussians describing the spectrometer resolution function.
+_r_ is the matrix containing the parameters of the Gaussians describing the spectrometer resolution function.
 
 Using a dictionary of keyword arguments, denoted **protein_fit in the above example, the model for the fit can be chosen, and information required by that specific model can be passed to the model function, such as a fixed parameters.
 
-Specific models are selected by their name assigned within the function model_sqw_parser. This name is passed via the keyword SQWmodel.
+Specific models are selected by their name assigned within the function *model_sqw_parser*. This name is passed via the keyword *SQWmodel*.
 For any model chosen, additional keywords have to specify the associated number of Lorentzians as well as whether or not a Dirac, a sloped, or a flat background are to be used.
 
 Depending on the specific model, additional keywords may apply that for instance pass fixed parameters.
@@ -43,11 +43,11 @@ _protein_fit = dict( SolventIntensities=Isolv, SolventWidths=Wsolv, NumberLorent
 selects a model performing a global fit for several momentum transfers at once that contains the following components, as explained in 
 M. Grimaldo et al., Phys.Chem.Chem.Phys. 17, 4645  (2015), https://dx.doi.org/doi:10.1039/C4CP04944F, equation 6:
 
-- One Lorentzian that accounts for the center-of-mass diffusion of tracer proteins in an aqueous solution sample and obeys gamma = D q^2, where gamma is the Lorentzian half width at half maximum;
+- One Lorentzian that accounts for the center-of-mass diffusion of tracer proteins in an aqueous solution sample and obeys _gamma = D q<sup>2</sup>_, where _gamma_ is the Lorentzian half width at half maximum;
 
 - Two Lorentzians that account for the internal diffusive dynamics. The amplitudes and widths of these Lorentzians are coupled as explained in the above reference, based on F. Roosen-Runge et al., J. Chem. Phys. 144, 204109 (2016), https://doi.org/10.1063/1.4950889. This coupling is implemented in the function two_state;
 
-- A fourth Lorentzian that accounts for the solvent water (D2O) contribution;
+- A fourth Lorentzian that accounts for the solvent water (D<sub>2</sub>O) contribution;
 
 - A Dirac accounting for the scattering signal from the sample container;
 
@@ -69,7 +69,7 @@ _gof = goodness_of_fit( x, y, popt, q, n, r, dy, **protein_fit )_ .
 
 The function *convoluted_model_parser* builds the actual fit function from a sum of Voigt functions and the background. It is called by *model_sqw_parser* which contains the different models for the scattering function. Importantly, *model_sqw_parser* can be extended by adding new models following the existing scheme.
 
-The spectrometer resolution function expressed by a sum of an arbitrary number of Gaussians can be fitted by the function resolution_function. This function is quite involved, as it has been attempted to accommodate several different spectrometers. A successful fit of a resolution function by a sum of Gaussians in general requires a considerable effort in adapting initial guesses and boundaries. It is noted that the Gaussians may have non-zero center positions along the energy axis.
+The spectrometer resolution function expressed by a sum of an arbitrary number of Gaussians can be fitted by the function *resolution_function*. This function is quite involved, as it has been attempted to accommodate several different spectrometers. A successful fit of a resolution function by a sum of Gaussians in general requires a considerable effort in adapting initial guesses and boundaries. It is noted that the Gaussians may have non-zero center positions along the energy axis.
 
 The other functions in the collection, such as load routines for data, are rather self-explaining.
 
