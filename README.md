@@ -15,7 +15,7 @@ The collection of functions contains a wrapper named wrapper_fit_func_parser tha
 
 A typical call of the fit function can be written as follows:
 
-*popt, pcov = curve_fit( lambda x, *p: wrapper_fit_func_parser( x, q, n, r, len( f0 ), p, **protein_fit ), x, y, p0=f0, bounds=(l,u), sigma=dy )*
+_popt, pcov = curve_fit( lambda x, *p: wrapper_fit_func_parser( x, q, n, r, len( f0 ), p, **protein_fit ), x, y, p0=f0, bounds=(l,u), sigma=dy )_
 
 Therein, the vectors x, y, and dy contain the energies, corresponding scattering intensities, and their errors, respectively. q is the vector containing the absolute values of the momentum transfer(s), n = range(...,...) contains the indices of the momentum transfers within q to be taken into account for the fit, and f0 the vector for the initial guess for the fit parameters p.
 r is the matrix containing the parameters of the Gaussians describing the spectrometer resolution function.
@@ -29,8 +29,8 @@ Depending on the specific model, additional keywords may apply that for instance
 
 For example, 
 
-protein_fit = dict( SolventIntensities=Isolv, SolventWidths=Wsolv, NumberLorentzians=4, UseDirac=1, UseSlopedBackground=1, 
-				       UseFlatBackground=1, BGSlope=bgs, BGFlat=bgc, SolventDirac=dsolv, SQWModel='BATSGlobal2State' )
+_protein_fit = dict( SolventIntensities=Isolv, SolventWidths=Wsolv, NumberLorentzians=4, UseDirac=1, UseSlopedBackground=1, 
+				       UseFlatBackground=1, BGSlope=bgs, BGFlat=bgc, SolventDirac=dsolv, SQWModel='BATSGlobal2State' )_
                
 selects a model performing a global fit for several momentum transfers at once that contains the following components, as explained in 
 M. Grimaldo et al., Phys.Chem.Chem.Phys. 17, 4645  (2015), https://dx.doi.org/doi:10.1039/C4CP04944F, equation 6:
