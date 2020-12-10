@@ -1,7 +1,7 @@
 # QENS_utilities
 ## A collection of python functions that may be useful as building blocks for QENS data analysis
 
-*Overview* 
+**Overview** 
 
 The file utilities_qens.py contains a collection of small functions that may help in writing scripts for the analysis of quasi-elastic neutron scattering (QENS) data. These small functions are designed to be able to employ *curve_fit* from *scipy.optimize* for the data fitting.
 
@@ -9,11 +9,11 @@ The functions have been inspired by the analysis of QENS data from proteins in s
 M. Grimaldo et al., EPJ Web of Conferences 83, 02005 (2015) published by the European Physical Society;
 https://dx.doi.org/10.1051/epjconf/20158302005 .
 
-*Disclaimer*
+**Disclaimer**
 
-Although the concepts used for the functions within _utilities_qens.py_ are well established (see above), the functions themselves consisute new implementations that have not yet been fully tested. They are made available for the sole purpose of an exchange of ideas.
+Although the concepts used for the functions within _utilities_qens.py_ are well established (see above), the functions themselves constitute new implementations that have not yet been fully tested. They are made available for the sole purpose of an exchange of ideas.
 
-*Documentation*
+**Documentation**
 
 Central to this approach to QENS data analysis is the description of the spectrometer energy resolution function _R_ by a sum of Gaussian functions such that this resolution function can be accounted for analytically - as opposed to a numerical convolution - when fitting a model _S_ to the observed spectra. This model scattering function _S_ can consist of a sum of an arbitrary number of Lorentzian functions that account for diffusion processes, of an elastic scattering contribution modeled by a Dirac function, as well as of an affine background defined by a slope and a constant offset. The Lorentzian and Dirac functions are centered at zero energy transfer by the definition of quasi-elastic scattering. The Lorentzian and Dirac functions are transformed into sums of Voigt functions by the analytical convolution with _R_.
 
