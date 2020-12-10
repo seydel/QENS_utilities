@@ -28,7 +28,7 @@ _popt, pcov = curve_fit( lambda x, *p: wrapper_fit_func_parser( x, q, n, r, len(
 Therein, the vectors _x_, _y_, and _dy_ contain the energies, corresponding scattering intensities, and their errors, respectively. _q_ is the vector containing the absolute values of the momentum transfer(s), _n = range(...,...)_ contains the indices of the momentum transfers within _q_ to be taken into account for the fit, and _f0_ the vector for the initial guess for the fit parameters _p_.
 _r_ is the matrix containing the parameters of the Gaussians describing the spectrometer resolution function.
 
-Using a dictionary of keyword arguments, denoted **protein_fit in the above example, the model for the fit can be chosen, and information required by that specific model can be passed to the model function, such as a fixed parameters.
+Using a dictionary of keyword arguments, denoted _**protein_fit_ in the above example, the model for the fit can be chosen, and information required by that specific model can be passed to the model function, such as a fixed parameters.
 
 Specific models are selected by their name assigned within the function *model_sqw_parser*. This name is passed via the keyword *SQWmodel*.
 For any model chosen, additional keywords have to specify the associated number of Lorentzians as well as whether or not a Dirac, a sloped, or a flat background are to be used.
@@ -53,7 +53,7 @@ M. Grimaldo et al., Phys.Chem.Chem.Phys. 17, 4645  (2015), https://dx.doi.org/do
 
 - An affine background defined by slope and offset. 
 
-The solvent Lorentzian intensities and widths as well as the elastic scattering intensity are fixed parameters that are passed to the model function as vectors via the keywords SolventIntensities, SolventWidths, and SolventDirac, respectively.
+The solvent Lorentzian intensities and widths as well as the elastic scattering intensity are fixed parameters that are passed to the model function as vectors via the keywords _SolventIntensities_, _SolventWidths_, and _SolventDirac_, respectively.
 
 Importantly, the entries in the vectors for the initial guess _p_ and bounds _(l, u)_ as well as the lengths of these vectors depend on the chosen model. In the above example, the first 5 entries account for the global parameters that apply for all _q_, i.e. the center-of-mass diffusion coefficient _D_, coupled internal diffusion coefficients _D<sub>1</sub>_, _D<sub>2</sub>_, and associated residence times _tau<sub>1</sub>_, and _tau<sub>2</sub>_. The following entries account for the _q_-dependent parameters _beta(q)_ and _A<sub>0</sub>(q)_, where _beta_ is a free amplitude scaling parameter and 0 <= _A<sub>0</sub>(q)_ <= 1 the elastic incoherent structure factor. There are _n_ entries for beta(q) followed by _n_ entries for _A<sub>0</sub>(q)_ in the parameter vectors.
 
