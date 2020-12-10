@@ -1,5 +1,5 @@
 # QENS_utilities
-A collection of python functions that may be useful as building blocks for QENS data analysis
+** A collection of python functions that may be useful as building blocks for QENS data analysis **
 
 The file utilities_qens.py contains a collection of small functions that may help in writing scripts for the analysis of quasi-elastic neutron scattering (QENS) data. These small functions are designed to be able to employ curve_fit from scipy.optimize for the data fitting.
 
@@ -15,7 +15,7 @@ The collection of functions contains a wrapper named wrapper_fit_func_parser tha
 
 A typical call of the fit function can be written as follows:
 
-popt, pcov = curve_fit( lambda x, *p: wrapper_fit_func_parser( x, q, n, r, len( f0 ), p, **protein_fit ), x, y, p0=f0, bounds=(l,u), sigma=dy )
+* popt, pcov = curve_fit( lambda x, *p: wrapper_fit_func_parser( x, q, n, r, len( f0 ), p, **protein_fit ), x, y, p0=f0, bounds=(l,u), sigma=dy ) *
 
 Therein, the vectors x, y, and dy contain the energies, corresponding scattering intensities, and their errors, respectively. q is the vector containing the absolute values of the momentum transfer(s), n = range(...,...) contains the indices of the momentum transfers within q to be taken into account for the fit, and f0 the vector for the initial guess for the fit parameters p.
 r is the matrix containing the parameters of the Gaussians describing the spectrometer resolution function.
