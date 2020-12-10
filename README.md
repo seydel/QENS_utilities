@@ -1,11 +1,19 @@
 # QENS_utilities
-**A collection of python functions that may be useful as building blocks for QENS data analysis**
+## A collection of python functions that may be useful as building blocks for QENS data analysis
+
+*Overview* 
 
 The file utilities_qens.py contains a collection of small functions that may help in writing scripts for the analysis of quasi-elastic neutron scattering (QENS) data. These small functions are designed to be able to employ *curve_fit* from *scipy.optimize* for the data fitting.
 
 The functions have been inspired by the analysis of QENS data from proteins in solution, the concept of which is explained in
 M. Grimaldo et al., EPJ Web of Conferences 83, 02005 (2015) published by the European Physical Society;
 https://dx.doi.org/10.1051/epjconf/20158302005 .
+
+*Disclaimer*
+
+Although the concepts used for the functions within _utilities_qens.py_ are well established (see above), the functions themselves consisute new implementations that have not yet been fully tested. They are made available for the sole purpose of an exchange of ideas.
+
+*Documentation*
 
 Central to this approach to QENS data analysis is the description of the spectrometer energy resolution function _R_ by a sum of Gaussian functions such that this resolution function can be accounted for analytically - as opposed to a numerical convolution - when fitting a model _S_ to the observed spectra. This model scattering function _S_ can consist of a sum of an arbitrary number of Lorentzian functions that account for diffusion processes, of an elastic scattering contribution modeled by a Dirac function, as well as of an affine background defined by a slope and a constant offset. The Lorentzian and Dirac functions are centered at zero energy transfer by the definition of quasi-elastic scattering. The Lorentzian and Dirac functions are transformed into sums of Voigt functions by the analytical convolution with _R_.
 
@@ -47,7 +55,7 @@ M. Grimaldo et al., Phys.Chem.Chem.Phys. 17, 4645  (2015), https://dx.doi.org/do
 
 The solvent Lorentzian intensities and widths as well as the elastic scattering intensity are fixed parameters that are passed to the model function as vectors via the keywords SolventIntensities, SolventWidths, and SolventDirac, respectively.
 
-Importantly, the entries in the vectors for the initial guess _p_ and bounds _(l, u)_ as well as the lengths of these vectors depend on the chosen model. In the above example, the first 5 entries account for the global parameters that apply for all _q_, i.e. the center-of-mass diffusion coefficient _D_, coupled internal diffusion coefficients _D<sub>1</sub>_, _D<sub>2</sub>_, and associated residence times _tau<sub>1</sub>, and _tau<sub>2</sub>_. The following entries account for the _q_-dependent parameters _beta(q)_ and _A<sub>0</sub>(q)_, where beta is a free amplitude scaling parameter and 0 <= _A<sub>0</sub>(q)_ <= 1 the elastic incoherent structure factor. There are _n_ entries for beta(q) followed by _n_ entries for _A<sub>0</sub>(q)_ in the parameter vectors.
+Importantly, the entries in the vectors for the initial guess _p_ and bounds _(l, u)_ as well as the lengths of these vectors depend on the chosen model. In the above example, the first 5 entries account for the global parameters that apply for all _q_, i.e. the center-of-mass diffusion coefficient _D_, coupled internal diffusion coefficients _D<sub>1</sub>_, _D<sub>2</sub>_, and associated residence times _tau<sub>1</sub>_, and _tau<sub>2</sub>_. The following entries account for the _q_-dependent parameters _beta(q)_ and _A<sub>0</sub>(q)_, where beta is a free amplitude scaling parameter and 0 <= _A<sub>0</sub>(q)_ <= 1 the elastic incoherent structure factor. There are _n_ entries for beta(q) followed by _n_ entries for _A<sub>0</sub>(q)_ in the parameter vectors.
 
 The keyword arguments are passed via the function *wrapper_fit_func_parser* onwards to several functions that use the arguments.  
 
@@ -65,4 +73,4 @@ The spectrometer resolution function expressed by a sum of an arbitrary number o
 
 The other functions in the collection, such as load routines for data, are rather self-explaining.
 
-It is noted that some of the low-level interfacing to *curve_fit* can be simplified by employing the python package *lmfit*.
+It is noted that the low-level interfacing to *curve_fit* can be simplified by employing the python package *lmfit*.
