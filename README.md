@@ -8,6 +8,8 @@ The file *utilities_qens.py* contains a collection of small functions that may h
 The functions have been inspired by the analysis of QENS data from proteins in solution, the concept of which is explained in
 M. Grimaldo et al., EPJ Web of Conferences 83, 02005 (2015) published by the European Physical Society;
 https://dx.doi.org/10.1051/epjconf/20158302005 .
+Further general information may for instance be found in M. Grimaldo et al., Quarterly Reviews of Biophysics 52, e7 (2019) published by Cambridge University Press;
+https://dx.doi.org/10.1017/S0033583519000027 .
 
 **Disclaimer**
 
