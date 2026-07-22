@@ -9,7 +9,8 @@ The functions have been inspired by the analysis of QENS data from proteins in s
 M. Grimaldo et al., EPJ Web of Conferences 83, 02005 (2015) published by the European Physical Society;
 https://dx.doi.org/10.1051/epjconf/20158302005 .
 Further general information may for instance be found in M. Grimaldo et al., Quarterly Reviews of Biophysics 52, e7 (2019) published by Cambridge University Press;
-https://dx.doi.org/10.1017/S0033583519000027 .
+https://dx.doi.org/10.1017/S0033583519000027 . Additional details are described in C. Beck et al., EPJ Web of Conferences 272, 01004 (2022); https://doi.org/10.1051/epjconf/202227201004 .
+The article I. Mosca et al., The Journal of Physical Chemistry Letters 15, 12051 (2024), https://doi.org/10.1021/acs.jpclett.4c02533 , contains an example of application.
 
 **Disclaimer**
 
@@ -21,7 +22,7 @@ Central to this approach to QENS data analysis is the description of the spectro
 
 QENS spectra are generally contained in 2-dimensional matrices _M_ storing the scattering intensity for different momentum and energy transfers. Typically, there are on the order of 20 momentum transfers _q_ and 1e3 energy transfers _w_. 
 
-The collection of functions contains a wrapper named *wrapper_fit_func_parser* that can be used to interface with *scipy.optimize.curve_fit*. Using this wrapper, either vectors containing a slice along _w_ at fixed _q_, or the entire matrix _M_ rearranged into a single long vector can be passed to *curve_fit*. In the latter case, the function _array2vector_ is used to rearrange _M_. When _M_ is passed subsequent to this rearrangement, a global fit of the model function for all energy and momentum transfers at once can be performed. This global fit is used in order to impose the dependence on the momentum transfer of the diffusion processes described by the model function.
+The collection of functions contains a wrapper named *wrapper_fit_func_parser* that can be used to interface with *scipy.optimize.curve_fit*. Using this wrapper, either vectors containing a slice along _w_ at fixed _q_, or the entire matrix _M_ rearranged into a single long vector can be passed to *curve_fit*. In the latter case, the function _array2vector_ is used to rearrange _M_. When _M_ is passed subsequent to this rearrangement, a global fit of the model function for all energy and momentum transfers at once can be performed. This global fit is used in order to impose the dependence on the momentum transfer of the diffusion processes described by the model function. (More recent versions of *curve_fit* can take matrices as arguments directly, circumventing the need for _array2vector_.)
 
 A typical call of the fit function can be written as follows:
 
@@ -30,7 +31,7 @@ _popt, pcov = curve_fit( lambda x, *p: wrapper_fit_func_parser( x, q, n, r, len(
 Therein, the vectors _x_, _y_, and _dy_ contain the energies, corresponding scattering intensities, and their errors, respectively. _q_ is the vector containing the absolute values of the momentum transfer(s), _n = range(...,...)_ contains the indices of the momentum transfers within _q_ to be taken into account for the fit, and _f0_ the vector for the initial guess for the fit parameters _p_.
 _r_ is the matrix containing the parameters of the Gaussians describing the spectrometer resolution function.
 
-Using a dictionary of keyword arguments, denoted _**protein_fit_ in the above example, the model for the fit can be chosen, and information required by that specific model can be passed to the model function, such as a fixed parameters.
+Using a dictionary of keyword arguments, denoted _**protein_fit_ in the above example, the model for the fit can be chosen, and information required by that specific model can be passed to the model function, such as a fixed parameter.
 
 Specific models are selected by their name assigned within the function *model_sqw_parser*. This name is passed via the keyword *SQWmodel*.
 For any model chosen, additional keywords have to specify the associated number of Lorentzians as well as whether or not a Dirac, a sloped, or a flat background are to be used.
@@ -58,6 +59,9 @@ M. Grimaldo et al., Phys.Chem.Chem.Phys. 17, 4645  (2015), https://dx.doi.org/do
 The solvent Lorentzian intensities and widths as well as the elastic scattering intensity are fixed parameters that are passed to the model function as vectors via the keywords _SolventIntensities_, _SolventWidths_, and _SolventDirac_, respectively.
 
 Importantly, the entries in the vectors for the initial guess _p_ and bounds _(l, u)_ as well as the lengths of these vectors depend on the chosen model. In the above example, the first 5 entries account for the global parameters that apply for all _q_, i.e. the center-of-mass diffusion coefficient _D_, coupled internal diffusion coefficients _D<sub>1</sub>_, _D<sub>2</sub>_, and associated residence times _tau<sub>1</sub>_, and _tau<sub>2</sub>_. The following entries account for the _q_-dependent parameters _beta(q)_ and _A<sub>0</sub>(q)_, where _beta_ is a free amplitude scaling parameter and 0 <= _A<sub>0</sub>(q)_ <= 1 the elastic incoherent structure factor. There are _n_ entries for beta(q) followed by _n_ entries for _A<sub>0</sub>(q)_ in the parameter vectors.
+
+In the models implemented in *model_sqw_parser*, _p_ represent the free parameters of the model scattering function _S_, and _fp_ the associated fit parameters. The equations _p[ ...] = ... fp[...] ..._ connect the fixed and fit parameters to these parameters _p_ of _S_.
+For global fits for all _q_ at once, _p[k,...]_ becomes two-dimensional, the first dimension representing the index of _q_. In the models, the order of the components is fixed: First, all Lorentzians, subsequently the Dirac, and finally the sloped and flat background.
 
 The keyword arguments are passed via the function *wrapper_fit_func_parser* onwards to several functions that use the arguments.  
 
