@@ -30,6 +30,14 @@ def V( x, alpha, gamma ): # Voigt line shape, gamma is the Lorentzian HWHM
 	sigma = alpha # / np.sqrt( 2. * np.log(2.) ) the input is the Gaussian sigma, not HWHM, from the Gaussian fit 
 	return np.real( wofz( (x + 1j*gamma) / sigma / np.sqrt(2.) ) ) / sigma / np.sqrt( 2.*np.pi )
 
+# ----------------------------------------------------------------------------------------------------------------------------
+def mlf( x, t, a ): # analytical expression for the Fourier transform of the Mittag-Leffler function; t=1/sigma
+	xl = np.sqrt( (x*t)**2 )                                      # parametrize absolute value by differentiable function
+	ye = np.zeros( np.shape( x ) ) + 2 * t * np.sin(a*np.pi/2)    # enumerator
+	yd = np.pi * xl * ( xl**a + xl**(-a) + 2*np.cos(a*np.pi/2) )  # denominator
+	y  = np.divide( ye, yd, out=ye, where=yd!=0 )                 # avoid division by zero at x = 0
+	return y
+
 # --------------------------------------------------------------------------------
 def group_4channels( data, *args ): # group by 4 channels in energy
 	class out:
@@ -186,6 +194,8 @@ def model_sqw_parser( hw, fp, q, qn, r, **kwargs ): # for a flexible configurati
 			bgs = value
 		if key == 'BGFlat':
 			bgf = value
+		if key == 'GammaL': # with of COM diffusion Lorentzian for numerical convolution with MLF
+			GLw = value			
 	for key, value in kwargs.items():
 		if key == 'SQWModel':               # select the model for the scattering function by the user-provided keyword
 			# The pattern always follows this scheme: the parameters are stored either in a vector p[:] in case of a fit at a single q-value
@@ -258,6 +268,24 @@ def model_sqw_parser( hw, fp, q, qn, r, **kwargs ): # for a flexible configurati
 					p[ k, 6 ] = DD2O[ k ]                                                       # amplitude of empty can Dirac
 					p[ k, 7 ] = bgs[ k ]                                                        # background slope
 					p[ k, 8 ] = bgf[ k ]                                                        # background offset
+			elif value == 'BATSGlobalMLF': # model including the Mittag-Leffler function
+				ng = 3                                              # number of global parameters: D, Di, alpha
+				p  = np.zeros( [ len(qn), 10 ] )                    # parameter matrix to be returned	
+				D     = fp[0]
+				taui  = fp[1]
+				alpha = fp[2]
+				for k in range( 0, len( qn ) ):
+					p[ k, 0 ] = fp[ ng + k ]       * fp[ ng + k + len(qn) ]                     # intensity center-of-mass Lorentzian: beta(q) * A_0(q)
+					p[ k, 1 ] = D * q[ k ]**2                                                   # width center-of-mass Lorentzian
+					p[ k, 2 ] = ID2O[ k ]                                                       # intensity solvent Lorentzian
+					p[ k, 3 ] = GD2O[ k ]                                                       # width solvent Lorentzian
+					p[ k, 4 ] = fp[ ng + k ] * ( 1 - fp[ ng + k + len(qn) ] )                   # intensity of MLF: beta(q) * ( 1 - A_0(q) )
+					p[ k, 5 ] = taui # * q[ k ]**2                                            # width MLF - generalized Fickian diffusion
+					p[ k, 6 ] = alpha		   				            # alpha of MLF
+					p[ k, 7 ] = DD2O[ k ]                                                       # amplitude of empty can Dirac
+					p[ k, 8 ] = bgs[ k ]                                                        # background slope
+					p[ k, 9 ] = bgf[ k ]                                                        # background offset
+					GLw[ k ]  = D * q[ k ]**2                                                   # width of COM Lorentzian for numerical convolution					
 			elif value == 'IN5GuestPerQFixedSolvent':
 				k = qn[0]                                       # fit parameters: Lorentzian amplitudes, width of guest molecule Lorentzian, amplitude of Dirac
 				p = np.zeros( 7 )                               # parameter matrix to be returned	
@@ -396,6 +424,7 @@ def convoluted_model_parser( hwq, q, qn, pq, r, **kwargs ):
 	uD  = 0    # use of an elastic contribution ("Dirac")
 	sB  = 0    # use of a sloped background
 	fB  = 0    # use of a constant background
+	GLw = 0    # with of COM diffusion Lorentzian for numerical convolution with MLF
 	#
 	# loop over the keywords relevant for this subroutine:
 	for key, value in kwargs.items():
@@ -405,6 +434,12 @@ def convoluted_model_parser( hwq, q, qn, pq, r, **kwargs ):
 		if key == 'UseDirac':
 			if value:
 				uD = 1
+		if key == 'UseMLF': # use Mittag-Leffler function
+			if value:
+				uM = 1
+		if key == 'GammaL': # with of COM diffusion Lorentzian for numerical convolution with MLF
+			if value.any():
+				GLw = value
 		if key == 'UseSlopedBackground':
 			if value:
 				sB = 1
@@ -436,6 +471,22 @@ def convoluted_model_parser( hwq, q, qn, pq, r, **kwargs ):
 			idx = idx + 2 # increment parameter index
 			# store component for later plotting:
 			out.L[l][k][:] = np.transpose( yy ) #.append( np.transpose( yy ) )
+		if uM: # Test of Mittag-Leffler function - attention: numerical convolution with resolution and COM Lorentzian width
+			hwl = np.squeeze( np.linspace( -2*hw.max(), 2*hw.max(), 2*len(hw) ) ) # do convolution on double energy axis to reduce cutoff artefacts
+			if ( np.size( qn ) == 1 ):
+				krl = sumNVoigts( hwl, qn,    r, GLw   ) # resolution vector, needs to be normalized by np.sum( krl )
+				yy  = p[ idx ] * np.convolve( mlf( hwl, p[ idx + 1 ], p[ idx + 2 ]  ), krl  / np.sum( krl ), mode='same' ) # add Mittag-Leffler function
+			else:
+				krl = sumNVoigts( hwl, qn[k], r, GLw[k] ) # resolution vector, needs to be normalized by np.sum( krl )
+				yy  = p[ idx ] * np.convolve( mlf( hwl, p[ idx + 1 ], p[ idx + 2 ]  ), krl  / np.sum( krl ), mode='same' ) # add Mittag-Leffler function
+			toadd = np.interp( hw, hwl, yy ) # interpolate to original energy axis
+			y   = y + toadd # add result to total fit
+			idx = idx + 3
+			# store component for later plotting:
+			if k == 0:
+				out.M = np.transpose( toadd )
+			else:
+				out.M = np.vstack( [ out.M, np.transpose( toadd ) ] )			
 		if uD:
 			if ( np.size( qn ) == 1 ):
 				yy  = p[ idx ] * sumNVoigts( hw, qn,    r, 0 )            # add elastic Line (Dirac)
