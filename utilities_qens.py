@@ -422,6 +422,7 @@ def convoluted_model_parser( hwq, q, qn, pq, r, **kwargs ):
 	y   = None # function values to be returned
 	nL  = 0    # number of Lorentzians
 	uD  = 0    # use of an elastic contribution ("Dirac")
+	uM  = 0    # use of Mittag-Leffler function
 	sB  = 0    # use of a sloped background
 	fB  = 0    # use of a constant background
 	GLw = 0    # with of COM diffusion Lorentzian for numerical convolution with MLF
