@@ -80,3 +80,23 @@ The spectrometer resolution function expressed by a sum of an arbitrary number o
 The other functions in the collection, such as load routines for data, are rather self-explaining.
 
 It is noted that the low-level interfacing to *curve_fit* can be simplified by employing the python package *lmfit*.
+
+**Module to fit the Mittag-Leffler function**
+
+The *utilities_qens.py* also allow to fit the Fourier transform of the Mittag-Leffler function (MLF), which can be seen as a generalized Lorentzian function. 
+In this case, in the absence of a "generalized Voigt" function, a numerical convolution with the resolution function is required.
+This numerical convolution is only applied to the MLF part of the model, whereas the other components continue to be convoluted analytically.
+The numerical convolution uses the description of the resolution function by the sum of Gaussians, as does the analytical convolution, and performs the convolution
+on a longer energy axis than the data axis to reduce numerical truncation effects.
+The Mittag-Leffler fit can be included as illustrated by the lines below, where the first line allocates a vector with the length of the number of used _q_-values. 
+This vector _Lw_ will be used to store the _q_-dependent widths of the Mittag-Leffler function.
+
+_Lw = np.zeros( np.shape( qp ) )_
+
+_protein_fit = dict( SolventIntensities=Isolv, SolventWidths=Wsolv, NumberLorentzians=2, UseDirac=1, UseSlopedBackground=1, UseMLF=1, GammaL=GLw,
+		       UseFlatBackground=1, BGSlope=bgs, BGFlat=bgc, SolventDirac=dsolv, SQWModel='BATSGlobalMLF' )_
+
+Within the model implemented inside *model_sqw_parser*, the MLF has to follow immediately after the Lorentzians and precede the Dirac and sloped and flat backgrounds, as illustrated by the example model _BATSGlobalMLF_.
+The MLF can be fitted for all _q_ at once with a global parameter _alpha_, such that a global fractional diffusion coefficient _gamma<sup>alpha</sup> = D<sub>alpha</sub> q<sup>2</sup>_ as a solution of the fractional diffusion equation can be fitted.
+For further reading see, e.g., I. Krasnov et al., J. R. Soc. Interface 13, 20160506 (2016), https://dx.doi.org/10.1098/rsif.2016.0506 , and references therein.
+
