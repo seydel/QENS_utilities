@@ -18,7 +18,7 @@ Although the concepts used for the functions within _utilities_qens.py_ are well
 
 **Documentation**
 
-Central to this approach to QENS data analysis is the description of the spectrometer energy resolution function _R_ by a sum of Gaussian functions such that this resolution function can be accounted for analytically - as opposed to a numerical convolution - when fitting a model _S_ to the observed spectra. This model scattering function _S_ can consist of a sum of an arbitrary number of Lorentzian functions that account for diffusion processes, of an elastic scattering contribution modeled by a Dirac function, as well as of an affine background defined by a slope and a constant offset. The Lorentzian and Dirac functions are centered at zero energy transfer by the definition of quasi-elastic scattering. The Lorentzian and Dirac functions are transformed into sums of Voigt functions by the analytical convolution with _R_.
+Central to this approach to QENS data analysis is the description of the spectrometer energy resolution function _R_ by a sum of Gaussian functions such that this resolution function can be accounted for analytically - as opposed to a numerical convolution - when fitting a model _S_ to the observed spectra. This model scattering function _S_ can consist of a sum of an arbitrary number of Lorentzian functions that account for diffusion processes, of an elastic scattering contribution modeled by a Dirac function, as well as of an affine background defined by a slope and a constant offset. The Lorentzian and Dirac functions are centered at zero energy transfer by the definition of quasi-elastic scattering. The Lorentzian and Dirac functions are transformed into sums of Voigt functions by the analytical convolution with _R_. An essential feature of the presented approach consists in the possibility to pass and arbitrarily large number of free as well as of fixed parameters to a flexibly coded model function.
 
 QENS spectra are generally contained in 2-dimensional matrices _M_ storing the scattering intensity for different momentum and energy transfers. Typically, there are on the order of 20 momentum transfers _q_ and 1e3 energy transfers _w_. 
 
@@ -75,7 +75,7 @@ _gof = goodness_of_fit( x, y, popt, q, n, r, dy, **protein_fit )_ .
 
 The function *convoluted_model_parser* builds the actual fit function from a sum of Voigt functions and the background. It is called by *model_sqw_parser* which contains the different models for the scattering function. Importantly, *model_sqw_parser* can be extended by adding new models following the existing scheme.
 
-The spectrometer resolution function expressed by a sum of an arbitrary number of Gaussians can be fitted by the function *resolution_function*. This function is quite involved, as it has been attempted to accommodate several different spectrometers. A successful fit of a resolution function by a sum of Gaussians in general requires a considerable effort in adapting initial guesses and boundaries. It is noted that the Gaussians may have non-zero center positions along the energy axis.
+The spectrometer resolution function expressed by a sum of an arbitrary number of Gaussians can be fitted by the function *resolution_function*. This function is quite involved, as it has been attempted to accommodate several different spectrometers. A successful fit of a resolution function by a sum of Gaussians in general requires a considerable effort in adapting initial guesses and boundaries. It is noted that the Gaussians may have non-zero center positions along the energy axis. (See also the section further below.)
 
 The other functions in the collection, such as load routines for data, are rather self-explaining.
 
@@ -85,7 +85,7 @@ It is noted that the low-level interfacing to *curve_fit* can be simplified by e
 
 The *utilities_qens.py* also allow to fit the Fourier transform of the Mittag-Leffler function (MLF), which can be seen as a generalized Lorentzian function. 
 In this case, in the absence of a "generalized Voigt" function, a numerical convolution with the resolution function is required.
-This numerical convolution is only applied to the MLF part of the model, whereas the other components continue to be convoluted analytically.
+This numerical convolution is only applied to the MLF part of the model, whereas the other components continue to be convoluted analytically. This separate treatment is automatically carried out within the function *convoluted_model_parser*.
 The numerical convolution uses the description of the resolution function by the sum of Gaussians, as does the analytical convolution, and performs the convolution
 on a longer energy axis than the data axis to reduce numerical truncation effects.
 The Mittag-Leffler fit can be included as illustrated by the lines below, where the first line allocates a vector with the length of the number of used _q_-values. 
