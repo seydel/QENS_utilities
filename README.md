@@ -10,7 +10,7 @@ M. Grimaldo et al., EPJ Web of Conferences 83, 02005 (2015) published by the Eur
 https://dx.doi.org/10.1051/epjconf/20158302005 .
 Further general information may for instance be found in M. Grimaldo et al., Quarterly Reviews of Biophysics 52, e7 (2019) published by Cambridge University Press;
 https://dx.doi.org/10.1017/S0033583519000027 . Additional details are described in C. Beck et al., EPJ Web of Conferences 272, 01004 (2022); https://doi.org/10.1051/epjconf/202227201004 .
-The article I. Mosca et al., The Journal of Physical Chemistry Letters 15, 12051 (2024), https://doi.org/10.1021/acs.jpclett.4c02533 , contains an example of application.
+The articles I. Mosca et al., The Journal of Physical Chemistry Letters 15, 12051 (2024), https://doi.org/10.1021/acs.jpclett.4c02533 , and J. Wahl et al., Nano Letters 26, 8208 (2026), https://doi.org/10.1021/acs.nanolett.6c01347 , contain examples of application.
 
 **Disclaimer**
 
@@ -73,7 +73,7 @@ and the goodnes of the fit can be calculated by
 
 _gof = goodness_of_fit( x, y, popt, q, n, r, dy, **protein_fit )_ .
 
-The function *convoluted_model_parser* builds the actual fit function from a sum of Voigt functions and the background. It is called by *model_sqw_parser* which contains the different models for the scattering function. Importantly, *model_sqw_parser* can be extended by adding new models following the existing scheme.
+The function *convoluted_model_parser* builds the actual fit function from a sum of Voigt functions (by calling *sumNVoigts*) and the background. It is called by *model_sqw_parser* which contains the different models for the scattering function. Importantly, *model_sqw_parser* can be extended by adding new models following the existing scheme.
 
 The spectrometer resolution function expressed by a sum of an arbitrary number of Gaussians can be fitted by the function *resolution_function*. This function is quite involved, as it has been attempted to accommodate several different spectrometers. A successful fit of a resolution function by a sum of Gaussians in general requires a considerable effort in adapting initial guesses and boundaries. It is noted that the Gaussians may have non-zero center positions along the energy axis. (See also the section further below.)
 
